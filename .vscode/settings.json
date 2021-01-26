@@ -1,0 +1,6 @@
+{
+    "search.exclude": {
+        "**/*.exe": true,
+        "**/*.vscode": true
+    }
+}
