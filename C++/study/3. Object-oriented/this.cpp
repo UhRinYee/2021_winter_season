@@ -1,3 +1,4 @@
+// 자기 자신을 가르키는 포인터 this
 #include <iostream>
 
 class Marine{
@@ -16,7 +17,7 @@ class Marine{
     Marine(int x, int y, int default_damage);
 
     int attack();                                       // 데미지를 리턴한다.
-    void be_attacked(int damage_earn);                  // 받는 데미지
+    Marine& be_attacked(int damage_earn);                  // 받는 데미지
     void move(int x, int y);                            // 새로운 위치
 
     void show_status();                                 // 상태를 보여준다.
@@ -58,9 +59,11 @@ void Marine::move(int x, int y){
 
 int Marine::attack(){ return default_damage; }
 
-void Marine::be_attacked(int damage_earn){
+Marine& Marine::be_attacked(int damage_earn){
   hp -= damage_earn;
   if(hp <= 0) is_dead = true;
+
+  return *this;
 }
 
 void Marine::show_status(){
@@ -71,32 +74,30 @@ void Marine::show_status(){
   std::cout << " 현재 총 마린 수 : " << total_marine_num << std::endl;
 }
 
-void create_marine(){
-  Marine marine3(10,10,4);
-  Marine::show_total_marine();
-}
 
 int main(){
   Marine marine1(2, 3, 5);
-  Marine::show_total_marine();
+  marine1.show_status();
 
   Marine marine2(3, 5, 10);
-  Marine::show_total_marine();
+  marine2.show_status();
 
-  create_marine();
-
-  std::cout << std::endl << "마린 1 이 마린 2 를 공격! " << std::endl;
-  marine2.be_attacked(marine1.attack());
+  std::cout << std::endl << "마린 1 이 마린 2 를 두 번 공격! " << std::endl;
+  marine2.be_attacked(marine1.attack()).be_attacked(marine1.attack());
 
   marine1.show_status();
   marine2.show_status();
-  marine2.show_status();
 }
 
-// C++에서는 멤버변수 초기화가 바로 되지않아 initializer_list방식을 사용하는것이다.
-// static 함수는 어느 객체도 함수를 소유하지 않게된다.
-// -> (클래스)::(static함수)로 접근하는것이 그 이유이다.
+/*
+this는 생략되어있었다.
 
-// static 함수 내에서는 클래스의 static 변수 만을 이용할 수 밖에 없다.
-// why? 누구의 객체인가, static변수인가 구분이 되지 않기때문에
-// -> this의 사용으로 커버
+Marine& Marine::be_attacked(int damage_earn) {
+  this->hp -= damage_earn;
+  if (this->hp <= 0) this->is_dead = true;
+
+  return *this;
+}
+*/
+
+// 실제로 모든 멤버 함수 내에서는 this키워드가 정의되어 있다.
