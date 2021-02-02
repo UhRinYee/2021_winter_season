@@ -3,8 +3,9 @@
 class Marine{
   int hp;                                               // 마린 체력
   int coord_x, coord_y;                                 // 마린 위치
-  int damage;                                           // 공격력
   bool is_dead;
+
+  const int default_damage;                             // 기본 공격력
 
   public:
     Marine();                                           // 기본 생성자
@@ -17,10 +18,10 @@ class Marine{
     void show_status();                                 // 상태를 보여준다.
 };
 
-Marine::Marine() : hp(50), coord_x(0), coord_y(0), damage(5), is_dead(false){}
+Marine::Marine() : hp(50), coord_x(0), coord_y(0), default_damage(5), is_dead(false){}
 
 Marine::Marine(int x, int y)
-    : coord_x(x), coord_y(y), hp(50), damage(5), is_dead(false){}
+    : coord_x(x), coord_y(y), hp(50), default_damage(5), is_dead(false){}
 
 
 void Marine::move(int x, int y){
@@ -28,7 +29,7 @@ void Marine::move(int x, int y){
   coord_y = y;
 }
 
-int Marine::attack(){ return damage; }
+int Marine::attack(){ return default_damage; }
 
 void Marine::be_attacked(int damage_earn){
   hp -= damage_earn;
@@ -48,6 +49,16 @@ int main(){
 
     marine1.show_status();
     marine2.show_status();
+
+    std::cout << std::endl << "마린1이 마린2를 공격! " << std::endl;
+    marine2.be_attacked(marine1.attack());
+
+
+    marine1.show_status();
+    marine2.show_status();
 }
 
 // 초기화 리스트를 사용하는것은 생성과 초기화를 동시에 하게 된다.
+// 마린의 공격력을 const로 고정하여 다른 개발자들이 공격력을 바꾸지 못하게함
+// const가 인자없이 선언되면 에러를 뿜어야하지만 초기화 리스트를 이용하여 에러를 보지않음.
+// -> 초기화 리스트의 특징을 잘 나타내는 코드드
