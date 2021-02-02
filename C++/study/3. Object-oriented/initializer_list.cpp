@@ -10,6 +10,7 @@ class Marine{
   public:
     Marine();                                           // 기본 생성자
     Marine(int x, int y);                               // x,y 좌표에 마린 생성
+    Marine(int x, int y, int default_damage);
 
     int attack();                                       // 데미지를 리턴한다.
     void be_attacked(int damage_earn);                  // 받는 데미지
@@ -22,6 +23,13 @@ Marine::Marine() : hp(50), coord_x(0), coord_y(0), default_damage(5), is_dead(fa
 
 Marine::Marine(int x, int y)
     : coord_x(x), coord_y(y), hp(50), default_damage(5), is_dead(false){}
+
+Marine::Marine(int x, int y, int default_damage)
+    : coord_x(x),
+      coord_y(y),
+      hp(50),
+      default_damage(default_damage),
+      is_dead(false){}
 
 
 void Marine::move(int x, int y){
@@ -44,8 +52,8 @@ void Marine::show_status(){
 }
 
 int main(){
-    Marine marine1(2,3);
-    Marine marine2(3,5);
+    Marine marine1(2,3,10);
+    Marine marine2(3,5,10);
 
     marine1.show_status();
     marine2.show_status();
